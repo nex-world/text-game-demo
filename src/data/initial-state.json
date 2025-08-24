@@ -1,0 +1,56 @@
+{
+  "entities": [
+    {
+      "id": "player-001",
+      "key": "PLAYER",
+      "properties": [
+        {
+          "key": "morality",
+          "value": 0,
+          "_type": "Number"
+        },
+        {
+          "key": "knowledge",
+          "value": 0,
+          "_type": "Number"
+        },
+        {
+          "key": "physique",
+          "value": 0,
+          "_type": "Number"
+        },
+        {
+          "key": "charm",
+          "value": 0,
+          "_type": "Number"
+        },
+        {
+          "key": "items",
+          "itemType": "String",
+          "value": [],
+          "_type": "List"
+        }
+      ]
+    }
+  ],
+  "globalProperties": [
+    {
+      "key": "availableActions",
+      "itemType": "String",
+      "value": ["morning_class"],
+      "_type": "List"
+    },
+    {
+      "key": "isInEventSequence",
+      "value": false,
+      "_type": "Boolean"
+    },
+    {
+      "key": "currentEventSequence",
+      "value": "",
+      "_type": "String"
+    }
+  ],
+  "history": [],
+  "rounds": 0
+}

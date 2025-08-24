@@ -1,0 +1,470 @@
+[
+  {
+    "name": "listen_carefully",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "认真听讲",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["listen_carefully", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.knowledge", 2]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.charm", -1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["lunch_break"]]
+      }
+    ]
+  },
+  {
+    "name": "daydream",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "走神发呆",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["daydream", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.knowledge", -1]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.physique", 1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["lunch_break"]]
+      }
+    ]
+  },
+  {
+    "name": "join_classmates",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "加入同学聊天",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["join_classmates", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.charm", 2]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.knowledge", -1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["after_school"]]
+      }
+    ]
+  },
+  {
+    "name": "eat_alone",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "独自用餐",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["eat_alone", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.physique", 1]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.charm", -1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["after_school"]]
+      }
+    ]
+  },
+  {
+    "name": "study_quietly",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "安静学习",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["study_quietly", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.knowledge", 3]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.charm", -2]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["after_school"]]
+      }
+    ]
+  },
+  {
+    "name": "go_home",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "直接回家",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["go_home", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.physique", 1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["weekend_event"]]
+      }
+    ]
+  },
+  {
+    "name": "join_club",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "参加社团活动",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["join_club", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.charm", 2]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.physique", 1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["weekend_event"]]
+      }
+    ]
+  },
+  {
+    "name": "help_teacher",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "帮助老师",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["help_teacher", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.morality", 2]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.knowledge", 1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["weekend_event"]]
+      }
+    ]
+  },
+  {
+    "name": "study_hard",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "努力学习",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["study_hard", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.knowledge", 4]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.physique", -2]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.charm", -1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["morning_class"]]
+      }
+    ]
+  },
+  {
+    "name": "exercise_outdoor",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "户外锻炼",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["exercise_outdoor", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.physique", 4]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.knowledge", -1]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.charm", 1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["morning_class"]]
+      }
+    ]
+  },
+  {
+    "name": "social_activity",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "社交活动",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["social_activity", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.charm", 3]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.morality", 1]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.physique", -1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["morning_class"]]
+      }
+    ]
+  },
+  {
+    "name": "rest_at_home",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "在家休息",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["rest_at_home", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.physique", 2]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.knowledge", -1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["morning_class"]]
+      }
+    ]
+  },
+  {
+    "name": "accept_challenge",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "接受挑战",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["accept_challenge", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.morality", 3]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.physique", -2]
+      },
+      {
+        "method": "add",
+        "params": ["@player.items", "lucky_charm"]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["morning_class"]]
+      }
+    ]
+  },
+  {
+    "name": "politely_decline",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "礼貌拒绝",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["politely_decline", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "delta",
+        "params": ["@player.charm", 1]
+      },
+      {
+        "method": "delta",
+        "params": ["@player.morality", -1]
+      },
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["morning_class"]]
+      }
+    ]
+  },
+  {
+    "name": "use_item",
+    "isAction": true,
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "使用道具",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["use_item", "@global.availableActions"]
+      },
+      {
+        "method": "gt",
+        "params": ["@player.items.length", 0]
+      }
+    ],
+    "effects": []
+  }
+]

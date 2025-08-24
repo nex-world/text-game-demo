@@ -1,0 +1,112 @@
+[
+  {
+    "name": "morning_class",
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "新的一天开始了，你坐在教室里准备上课。老师正在讲解今天的内容，你觉得...",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["morning_class", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["listen_carefully", "daydream", "use_item"]]
+      }
+    ]
+  },
+  {
+    "name": "lunch_break",
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "午休时间到了，同学们三三两两地聚在一起聊天吃饭。你决定...",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["lunch_break", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["join_classmates", "eat_alone", "study_quietly", "use_item"]]
+      }
+    ]
+  },
+  {
+    "name": "after_school",
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "放学了，夕阳西下，校园里还有一些学生在活动。你准备...",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["after_school", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["go_home", "join_club", "help_teacher", "use_item"]]
+      }
+    ]
+  },
+  {
+    "name": "weekend_event",
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "周末到了，你有整整两天的自由时间。你想要...",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["weekend_event", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["study_hard", "exercise_outdoor", "social_activity", "rest_at_home", "use_item"]]
+      }
+    ]
+  },
+  {
+    "name": "random_encounter",
+    "args": [
+      {
+        "name": "player",
+        "selector": "PLAYER"
+      }
+    ],
+    "descTemplate": "在路上，你遇到了一个陌生的老人，他手里拿着一个神秘的盒子，询问你是否愿意接受一个挑战...",
+    "conditions": [
+      {
+        "method": "in",
+        "params": ["random_encounter", "@global.availableActions"]
+      }
+    ],
+    "effects": [
+      {
+        "method": "set",
+        "params": ["@global.availableActions", ["accept_challenge", "politely_decline", "use_item"]]
+      }
+    ]
+  }
+]

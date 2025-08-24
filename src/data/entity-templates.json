@@ -1,0 +1,103 @@
+[
+  {
+    "key": "PLAYER",
+    "name": "玩家角色",
+    "description": "游戏中的主角，一名高中生",
+    "properties": [
+      {
+        "key": "morality",
+        "value": 0,
+        "_type": "Number"
+      },
+      {
+        "key": "knowledge",
+        "value": 0,
+        "_type": "Number"
+      },
+      {
+        "key": "physique",
+        "value": 0,
+        "_type": "Number"
+      },
+      {
+        "key": "charm",
+        "value": 0,
+        "_type": "Number"
+      },
+      {
+        "key": "items",
+        "itemType": "String",
+        "value": [],
+        "_type": "List"
+      }
+    ]
+  },
+  {
+    "key": "lucky_charm",
+    "name": "幸运符",
+    "description": "一个神秘的护身符，能在关键时刻保护主角",
+    "properties": [
+      {
+        "key": "effect",
+        "value": "护身符：在任何属性即将达到极值时，可以消耗此道具来避免死亡",
+        "_type": "String"
+      },
+      {
+        "key": "usable",
+        "value": true,
+        "_type": "Boolean"
+      }
+    ]
+  },
+  {
+    "key": "curse_book",
+    "name": "诅咒之书",
+    "description": "一本带有诅咒的古书，会持续影响持有者",
+    "properties": [
+      {
+        "key": "effect",
+        "value": "诅咒：每回合道德-1，知识+2",
+        "_type": "String"
+      },
+      {
+        "key": "cursed",
+        "value": true,
+        "_type": "Boolean"
+      }
+    ]
+  },
+  {
+    "key": "energy_drink",
+    "name": "能量饮料",
+    "description": "提供短期的能量提升",
+    "properties": [
+      {
+        "key": "effect",
+        "value": "使用后体魄+3，但魅力-1",
+        "_type": "String"
+      },
+      {
+        "key": "consumable",
+        "value": true,
+        "_type": "Boolean"
+      }
+    ]
+  },
+  {
+    "key": "love_letter",
+    "name": "情书",
+    "description": "一封神秘的情书",
+    "properties": [
+      {
+        "key": "effect",
+        "value": "使用后魅力+2，但可能引发事件",
+        "_type": "String"
+      },
+      {
+        "key": "consumable",
+        "value": true,
+        "_type": "Boolean"
+      }
+    ]
+  }
+]

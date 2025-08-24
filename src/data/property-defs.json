@@ -1,0 +1,66 @@
+[
+  {
+    "key": "morality",
+    "name": "道德",
+    "type": "Number",
+    "defaultValue": 0,
+    "min": -20,
+    "max": 20,
+    "description": "角色的道德水平，影响与他人的关系和行为选择"
+  },
+  {
+    "key": "knowledge",
+    "name": "知识",
+    "type": "Number",
+    "defaultValue": 0,
+    "min": -20,
+    "max": 20,
+    "description": "角色的知识储备，影响学习能力和问题解决"
+  },
+  {
+    "key": "physique",
+    "name": "体魄",
+    "type": "Number",
+    "defaultValue": 0,
+    "min": -20,
+    "max": 20,
+    "description": "角色的身体素质，影响健康和运动能力"
+  },
+  {
+    "key": "charm",
+    "name": "魅力",
+    "type": "Number",
+    "defaultValue": 0,
+    "min": -20,
+    "max": 20,
+    "description": "角色的魅力值，影响人际关系和社交能力"
+  },
+  {
+    "key": "items",
+    "name": "道具",
+    "type": "List",
+    "defaultValue": [],
+    "description": "角色持有的道具列表"
+  },
+  {
+    "key": "availableActions",
+    "name": "可用行动",
+    "type": "List",
+    "defaultValue": ["study", "exercise", "socialize"],
+    "description": "当前回合可选择的行动"
+  },
+  {
+    "key": "isInEventSequence",
+    "name": "是否在事件序列中",
+    "type": "Boolean",
+    "defaultValue": false,
+    "description": "标记是否正在进行连锁事件"
+  },
+  {
+    "key": "currentEventSequence",
+    "name": "当前事件序列",
+    "type": "String",
+    "defaultValue": "",
+    "description": "当前正在进行的事件序列名称"
+  }
+]
