@@ -103,6 +103,7 @@ export const useGameStore = create<GameStore>()(
           onActionPerformed: (action) => {
             const description = action.getDesc();
             get().addToHistory(`行动：${description}`);
+            console.log('Action performed:', action.template.name, action.template.effects);
             
             // 执行游戏更新
             get().gameInstance?.update();
