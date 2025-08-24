@@ -110,39 +110,55 @@ export class GameEngine {
 
   private initializeEffectExecutors(): void {
     this.effectExecutors.set('delta', (gameState, args) => {
-      const [path, delta] = args[0].params;
-      const currentValue = this.resolveValue(gameState, path, args);
-      const newValue = Number(currentValue) + Number(delta);
-      this.setValue(gameState, path, newValue, args);
+      // args[0] 应该包含效果的详细信息
+      const effectInfo = args[0];
+      if (effectInfo && effectInfo.params) {
+        const [path, delta] = effectInfo.params;
+        const currentValue = this.resolveValue(gameState, path, args);
+        const newValue = Number(currentValue) + Number(delta);
+        this.setValue(gameState, path, newValue, args);
+      }
     });
 
     this.effectExecutors.set('set', (gameState, args) => {
-      const [path, newValue] = args[0].params;
-      this.setValue(gameState, path, newValue, args);
+      const effectInfo = args[0];
+      if (effectInfo && effectInfo.params) {
+        const [path, newValue] = effectInfo.params;
+        this.setValue(gameState, path, newValue, args);
+      }
     });
 
     this.effectExecutors.set('toggle', (gameState, args) => {
-      const [path] = args[0].params;
-      const currentValue = this.resolveValue(gameState, path, args);
-      const newValue = !Boolean(currentValue);
-      this.setValue(gameState, path, newValue, args);
+      const effectInfo = args[0];
+      if (effectInfo && effectInfo.params) {
+        const [path] = effectInfo.params;
+        const currentValue = this.resolveValue(gameState, path, args);
+        const newValue = !Boolean(currentValue);
+        this.setValue(gameState, path, newValue, args);
+      }
     });
 
     this.effectExecutors.set('add', (gameState, args) => {
-      const [arrayPath, item] = args[0].params;
-      const array = this.resolveValue(gameState, arrayPath, args);
-      if (Array.isArray(array)) {
-        const newArray = [...array, item];
-        this.setValue(gameState, arrayPath, newArray, args);
+      const effectInfo = args[0];
+      if (effectInfo && effectInfo.params) {
+        const [arrayPath, item] = effectInfo.params;
+        const array = this.resolveValue(gameState, arrayPath, args);
+        if (Array.isArray(array)) {
+          const newArray = [...array, item];
+          this.setValue(gameState, arrayPath, newArray, args);
+        }
       }
     });
 
     this.effectExecutors.set('remove', (gameState, args) => {
-      const [arrayPath, item] = args[0].params;
-      const array = this.resolveValue(gameState, arrayPath, args);
-      if (Array.isArray(array)) {
-        const newArray = array.filter(x => x !== item);
-        this.setValue(gameState, arrayPath, newArray, args);
+      const effectInfo = args[0];
+      if (effectInfo && effectInfo.params) {
+        const [arrayPath, item] = effectInfo.params;
+        const array = this.resolveValue(gameState, arrayPath, args);
+        if (Array.isArray(array)) {
+          const newArray = array.filter(x => x !== item);
+          this.setValue(gameState, arrayPath, newArray, args);
+        }
       }
     });
   }
@@ -227,14 +243,15 @@ export class GameEngine {
     return checker(gameState, conditionArgs);
   }
 
-  public executeEffect(effect: EffectTemplate, gameState: GameState): void {
+  public executeEffect(effect: EffectTemplate, gameState: GameState, eventArgs: EventArgument[]): void {
     const executor = this.effectExecutors.get(effect.method);
     if (!executor) {
       console.warn(`Unknown effect method: ${effect.method}`);
       return;
     }
     
-    const effectArgs = [{ template: 'effect', params: effect.params }];
+    // 创建一个包含效果信息的特殊参数
+    const effectArgs = [{ template: 'effect', params: effect.params }, ...eventArgs];
     executor(gameState, effectArgs);
   }
 
@@ -303,7 +320,7 @@ export class GameEngine {
     }
 
     for (const effect of event.template.effects) {
-      this.executeEffect(effect, gameState);
+      this.executeEffect(effect, gameState, event.args);
     }
 
     event.state = 'resolved';
