@@ -13,6 +13,17 @@ export function GameHistory() {
     }
   }, [gameHistory]);
 
+  const getEntryClassName = (entry: string): string => {
+    if (entry.includes('事件：')) return 'bg-blue-50';
+    if (entry.includes('行动：')) return 'bg-green-50';
+    if (entry.includes('游戏结束')) return 'bg-red-50';
+    if (entry.includes('变化：')) return 'bg-yellow-50';
+    if (entry.includes('道具：') || entry.includes('获得道具') || entry.includes('失去道具')) {
+      return 'bg-gray-100';
+    }
+    return 'bg-gray-50';
+  };
+
   return (
     <Card className={`${isGameOver ? 'opacity-60' : ''}`}>
       <CardHeader>
@@ -27,13 +38,7 @@ export function GameHistory() {
             gameHistory.map((entry, index) => (
               <div 
                 key={index}
-                className={`text-sm p-2 rounded border-l-2 ${
-                  entry.includes('事件：') ? 'border-blue-400 bg-blue-50' :
-                  entry.includes('行动：') ? 'border-green-400 bg-green-50' :
-                  entry.includes('游戏结束') ? 'border-red-400 bg-red-50' :
-                  entry.includes('变化：') ? 'border-yellow-400 bg-yellow-50' :
-                  'border-gray-400 bg-gray-50'
-                }`}
+                className={`rounded px-3 py-2 text-sm ${getEntryClassName(entry)}`}
               >
                 {entry}
               </div>

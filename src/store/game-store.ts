@@ -3,6 +3,7 @@ import { subscribeWithSelector } from 'zustand/middleware';
 import type { UIState, GameCallbacks, Action } from '../types';
 import { GameInstance } from '../lib/game-instance';
 import { gameConfigLoader } from '../lib/config-loader';
+import { getItemName } from '../utils/item-utils';
 
 interface GameStore extends UIState {
   // 游戏实例
@@ -102,12 +103,28 @@ export const useGameStore = create<GameStore>()(
           
           onActionPerformed: (action) => {
             const description = action.getDesc();
+            const previousItems = get().playerStats.items;
             get().addToHistory(`行动：${description}`);
-            console.log('Action performed:', action.template.name, action.template.effects);
+            for (const effect of action.template.effects) {
+              const [path, itemKey] = effect.params;
+              if (path !== '@player.items' || typeof itemKey !== 'string') continue;
+
+              if (effect.method === 'add' && !previousItems.includes(itemKey)) {
+                get().addToHistory(`获得道具：${getItemName(itemKey)}`);
+              }
+
+              if (effect.method === 'remove' && previousItems.includes(itemKey)) {
+                get().addToHistory(`失去道具：${getItemName(itemKey)}`);
+              }
+            }
             
             // 执行游戏更新
             get().gameInstance?.update();
             get().updateGameState();
+          },
+
+          onItemUsed: (itemKey, message) => {
+            get().addToHistory(`${getItemName(itemKey)}：${message}`);
           },
         };
         
@@ -155,7 +172,6 @@ export const useGameStore = create<GameStore>()(
       
       const success = gameInstance.useItem(itemKey);
       if (success) {
-        get().addToHistory(`使用了道具：${itemKey}`);
         get().updateGameState();
       }
     },

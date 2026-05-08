@@ -4,11 +4,22 @@ import type {
   EventTemplate,
   ActionTemplate,
   GameCallbacks,
+  ListItem,
 } from '../types';
 import { GameState } from './game-state';
 import { GameEngine } from './game-engine';
 import { Action } from './event';
-import { getPropertyNumber } from '../utils/property-utils';
+import { clamp, getPropertyNumber } from '../utils/property-utils';
+
+const playerStatKeys = ['morality', 'knowledge', 'physique', 'charm'] as const;
+type PlayerStatKey = typeof playerStatKeys[number];
+
+const playerStatLabels: Record<PlayerStatKey, string> = {
+  morality: '道德',
+  knowledge: '知识',
+  physique: '体魄',
+  charm: '魅力',
+};
 
 export class GameInstance implements IGameInstance {
   state: GameState;
@@ -83,6 +94,10 @@ export class GameInstance implements IGameInstance {
       gameOverReason = '魅力过高，你被人情杀。';
     }
 
+    if (gameOverReason && this.consumeLuckyCharmForDeath()) {
+      return false;
+    }
+
     if (gameOverReason) {
       this.callbacks.onGameOver?.(gameOverReason, this.state.rounds);
       return true;
@@ -100,23 +115,8 @@ export class GameInstance implements IGameInstance {
       for (const itemKey of items.value) {
         if (itemKey === 'curse_book') {
           // 诅咒之书的效果：每回合道德-1，知识+2
-          const currentMorality = getPropertyNumber(player.getProperty('morality'));
-          const currentKnowledge = getPropertyNumber(player.getProperty('knowledge'));
-          
-          player.setProperty('morality', { 
-            key: 'morality', 
-            value: currentMorality - 1, 
-            _type: 'Number' 
-          });
-          
-          player.setProperty('knowledge', { 
-            key: 'knowledge', 
-            value: currentKnowledge + 2, 
-            _type: 'Number' 
-          });
-
-          this.callbacks.onPropertyChange?.('PLAYER', 'morality', currentMorality, currentMorality - 1);
-          this.callbacks.onPropertyChange?.('PLAYER', 'knowledge', currentKnowledge, currentKnowledge + 2);
+          this.setPlayerNumber(player, 'morality', getPropertyNumber(player.getProperty('morality')) - 1);
+          this.setPlayerNumber(player, 'knowledge', getPropertyNumber(player.getProperty('knowledge')) + 2);
         }
       }
     }
@@ -166,98 +166,149 @@ export class GameInstance implements IGameInstance {
     const player = this.state.getEntity('PLAYER');
     if (!player) return false;
 
-    const items = player.getProperty('items');
-    if (items?._type !== 'List' || !items.value.includes(itemKey)) {
+    if (!this.hasPlayerItem(itemKey)) {
       return false;
     }
 
-    // 根据道具效果执行相应逻辑
+    let message: string | null = null;
+
     switch (itemKey) {
       case 'lucky_charm':
-        this.useLuckyCharm();
+        message = this.useLuckyCharm();
         break;
       case 'energy_drink':
-        this.useEnergyDrink();
+        message = this.useEnergyDrink();
         break;
       case 'love_letter':
-        this.useLoveLetter();
+        message = this.useLoveLetter();
+        break;
+      case 'curse_book':
+        message = this.discardCurseBook();
         break;
       default:
         return false;
     }
 
-    // 移除一次性道具
-    if (['lucky_charm', 'energy_drink', 'love_letter'].includes(itemKey)) {
-      const newItems = items.value.filter((item: any) => item !== itemKey);
-      player.setProperty('items', {
-        key: 'items',
-        itemType: 'String',
-        value: newItems,
-        _type: 'List'
-      });
+    if (!message) {
+      return false;
     }
 
+    this.callbacks.onItemUsed?.(itemKey, message);
+    this.checkGameOver();
     return true;
   }
 
-  private useLuckyCharm(): void {
-    // 护身符逻辑：在即将死亡时可以拯救角色
-    const player = this.state.getEntity('PLAYER');
-    if (!player) return;
+  private useLuckyCharm(): string | null {
+    const stabilizedStats = this.stabilizeDangerousStats(15);
 
-    const morality = getPropertyNumber(player.getProperty('morality'));
-    const knowledge = getPropertyNumber(player.getProperty('knowledge'));
-    const physique = getPropertyNumber(player.getProperty('physique'));
-    const charm = getPropertyNumber(player.getProperty('charm'));
+    if (stabilizedStats.length === 0) {
+      return '幸运符没有反应';
+    }
 
-    // 将所有极值拉回安全范围
-    if (morality <= -19 || morality >= 19) {
-      player.setProperty('morality', { key: 'morality', value: 0, _type: 'Number' });
-    }
-    if (knowledge <= -19 || knowledge >= 19) {
-      player.setProperty('knowledge', { key: 'knowledge', value: 0, _type: 'Number' });
-    }
-    if (physique <= -19 || physique >= 19) {
-      player.setProperty('physique', { key: 'physique', value: 0, _type: 'Number' });
-    }
-    if (charm <= -19 || charm >= 19) {
-      player.setProperty('charm', { key: 'charm', value: 0, _type: 'Number' });
-    }
+    this.removePlayerItem('lucky_charm');
+    return `幸运符生效：${stabilizedStats.join('、')}回到安全范围`;
   }
 
-  private useEnergyDrink(): void {
+  private consumeLuckyCharmForDeath(): boolean {
+    if (!this.hasPlayerItem('lucky_charm')) {
+      return false;
+    }
+
+    const stabilizedStats = this.stabilizeDangerousStats(20);
+    if (stabilizedStats.length === 0) {
+      return false;
+    }
+
+    this.removePlayerItem('lucky_charm');
+    this.callbacks.onItemUsed?.(
+      'lucky_charm',
+      `幸运符碎裂：${stabilizedStats.join('、')}回到安全范围`
+    );
+    return true;
+  }
+
+  private stabilizeDangerousStats(threshold: number): string[] {
     const player = this.state.getEntity('PLAYER');
-    if (!player) return;
+    if (!player) return [];
+
+    const changedStats: string[] = [];
+
+    for (const key of playerStatKeys) {
+      const value = getPropertyNumber(player.getProperty(key));
+      if (Math.abs(value) >= threshold) {
+        this.setPlayerNumber(player, key, value > 0 ? 10 : -10);
+        changedStats.push(playerStatLabels[key]);
+      }
+    }
+
+    return changedStats;
+  }
+
+  private useEnergyDrink(): string {
+    const player = this.state.getEntity('PLAYER');
+    if (!player) return '';
 
     const currentPhysique = getPropertyNumber(player.getProperty('physique'));
     const currentCharm = getPropertyNumber(player.getProperty('charm'));
 
-    player.setProperty('physique', {
-      key: 'physique',
-      value: Math.min(currentPhysique + 3, 20),
-      _type: 'Number'
-    });
+    this.setPlayerNumber(player, 'physique', clamp(currentPhysique + 4, -20, 19));
+    this.setPlayerNumber(player, 'charm', clamp(currentCharm - 1, -19, 20));
+    this.removePlayerItem('energy_drink');
 
-    player.setProperty('charm', {
-      key: 'charm',
-      value: Math.max(currentCharm - 1, -20),
-      _type: 'Number'
-    });
+    return '能量饮料生效：体魄+4，魅力-1';
   }
 
-  private useLoveLetter(): void {
+  private useLoveLetter(): string {
     const player = this.state.getEntity('PLAYER');
-    if (!player) return;
+    if (!player) return '';
 
     const currentCharm = getPropertyNumber(player.getProperty('charm'));
+    const currentMorality = getPropertyNumber(player.getProperty('morality'));
 
-    player.setProperty('charm', {
-      key: 'charm',
-      value: Math.min(currentCharm + 2, 20),
-      _type: 'Number'
+    this.setPlayerNumber(player, 'charm', clamp(currentCharm + 3, -20, 19));
+    this.setPlayerNumber(player, 'morality', clamp(currentMorality - 1, -19, 20));
+    this.removePlayerItem('love_letter');
+
+    return '情书生效：魅力+3，道德-1';
+  }
+
+  private discardCurseBook(): string {
+    this.removePlayerItem('curse_book');
+    return '丢掉了诅咒之书：每回合惩罚停止';
+  }
+
+  private setPlayerNumber(player: ReturnType<GameState['getEntity']>, key: PlayerStatKey, value: number): void {
+    if (!player) return;
+
+    const oldValue = getPropertyNumber(player.getProperty(key));
+    if (oldValue === value) return;
+
+    player.setProperty(key, {
+      key,
+      value,
+      _type: 'Number',
     });
 
-    // 可能触发特殊事件（这里简化处理）
+    this.callbacks.onPropertyChange?.('PLAYER', key, oldValue, value);
+  }
+
+  private hasPlayerItem(itemKey: string): boolean {
+    const player = this.state.getEntity('PLAYER');
+    const items = player?.getProperty('items');
+    return items?._type === 'List' && items.value.includes(itemKey);
+  }
+
+  private removePlayerItem(itemKey: string): void {
+    const player = this.state.getEntity('PLAYER');
+    const items = player?.getProperty('items');
+    if (items?._type !== 'List') return;
+
+    player?.setProperty('items', {
+      key: 'items',
+      itemType: 'String',
+      value: items.value.filter((item: ListItem) => item !== itemKey),
+      _type: 'List'
+    });
   }
 
   public getGameState(): GameState {

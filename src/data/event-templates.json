@@ -17,7 +17,7 @@
     "effects": [
       {
         "method": "set",
-        "params": ["@global.availableActions", ["listen_carefully", "daydream", "use_item"]]
+        "params": ["@global.availableActions", ["listen_carefully", "daydream"]]
       }
     ]
   },
@@ -39,7 +39,7 @@
     "effects": [
       {
         "method": "set",
-        "params": ["@global.availableActions", ["join_classmates", "eat_alone", "study_quietly", "use_item"]]
+        "params": ["@global.availableActions", ["join_classmates", "eat_alone", "study_quietly"]]
       }
     ]
   },
@@ -61,7 +61,7 @@
     "effects": [
       {
         "method": "set",
-        "params": ["@global.availableActions", ["go_home", "join_club", "help_teacher", "use_item"]]
+        "params": ["@global.availableActions", ["go_home", "join_club", "help_teacher"]]
       }
     ]
   },
@@ -83,7 +83,7 @@
     "effects": [
       {
         "method": "set",
-        "params": ["@global.availableActions", ["study_hard", "exercise_outdoor", "social_activity", "rest_at_home", "use_item"]]
+        "params": ["@global.availableActions", ["study_hard", "exercise_outdoor", "social_activity", "rest_at_home"]]
       }
     ]
   },
@@ -105,7 +105,7 @@
     "effects": [
       {
         "method": "set",
-        "params": ["@global.availableActions", ["accept_challenge", "politely_decline", "use_item"]]
+        "params": ["@global.availableActions", ["accept_challenge", "politely_decline"]]
       }
     ]
   }

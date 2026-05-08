@@ -13,7 +13,8 @@ export function GameInterface() {
     isLoading, 
     error, 
     initGame, 
-    resetGame 
+    resetGame,
+    score,
   } = useGameStore();
 
   useEffect(() => {
@@ -38,7 +39,6 @@ export function GameInterface() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center space-y-4">
           <h1 className="text-3xl font-bold">校园生存游戏</h1>
-          <p className="text-muted-foreground">点击开始游戏</p>
           <Button onClick={initGame}>开始游戏</Button>
         </div>
       </div>
@@ -54,7 +54,7 @@ export function GameInterface() {
             <h1 className="text-2xl font-bold">校园生存游戏</h1>
             <div className="flex items-center gap-4">
               <span className="text-sm text-muted-foreground">
-                回合: {useGameStore.getState().score}
+                回合: {score}
               </span>
               <Button 
                 variant="outline" 
@@ -87,33 +87,6 @@ export function GameInterface() {
           </div>
         </div>
 
-        {/* 游戏说明 */}
-        <div className="mt-8 bg-white rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">游戏说明</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
-            <div>
-              <h4 className="font-medium text-foreground mb-2">游戏目标</h4>
-              <ul className="space-y-1">
-                <li>• 在校园中生存尽可能多的回合</li>
-                <li>• 平衡四项属性：道德、知识、体魄、魅力</li>
-                <li>• 避免任何属性达到极值（±20）</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-foreground mb-2">死亡条件</h4>
-              <ul className="space-y-1">
-                <li>• 道德 -20：被混混杀死</li>
-                <li>• 道德 +20：见义勇为时死亡</li>
-                <li>• 知识 -20：被迫退学</li>
-                <li>• 知识 +20：学习过度猝死</li>
-                <li>• 体魄 -20：因病重而死</li>
-                <li>• 体魄 +20：锻炼过度猝死</li>
-                <li>• 魅力 -20：被霸凌致死</li>
-                <li>• 魅力 +20：被情杀</li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </main>
 
       {/* 游戏结束模态框 */}

@@ -2,9 +2,10 @@ import { Badge } from '../ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Progress } from '../ui/progress';
 import { useGameStore } from '../../store/game-store';
+import { getItemName } from '../../utils/item-utils';
 
 export function PlayerStats() {
-  const { playerStats, isGameOver } = useGameStore();
+  const { playerStats, isGameOver, score } = useGameStore();
 
   const getStatColor = (value: number): "destructive" | "secondary" | "default" => {
     if (value <= -15) return 'destructive';
@@ -90,7 +91,7 @@ export function PlayerStats() {
             {playerStats.items.length > 0 ? (
               playerStats.items.map((item, index) => (
                 <Badge key={index} variant="outline">
-                  {item}
+                  {getItemName(item)}
                 </Badge>
               ))
             ) : (
@@ -103,7 +104,7 @@ export function PlayerStats() {
         <div className="pt-2 border-t">
           <div className="flex justify-between text-sm">
             <span>回合数</span>
-            <span className="font-medium">{useGameStore.getState().score}</span>
+            <span className="font-medium">{score}</span>
           </div>
         </div>
       </CardContent>

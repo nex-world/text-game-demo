@@ -144,7 +144,7 @@ export class GameEngine {
         const [arrayPath, item] = effectInfo.params;
         const array = this.resolveValue(gameState, arrayPath, args);
         if (Array.isArray(array)) {
-          const newArray = [...array, item];
+          const newArray = array.includes(item) ? array : [...array, item];
           this.setValue(gameState, arrayPath, newArray, args);
         }
       }

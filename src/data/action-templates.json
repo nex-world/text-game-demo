@@ -87,6 +87,10 @@
         "params": ["@player.knowledge", -1]
       },
       {
+        "method": "add",
+        "params": ["@player.items", "love_letter"]
+      },
+      {
         "method": "set",
         "params": ["@global.availableActions", ["after_school"]]
       }
@@ -116,6 +120,10 @@
       {
         "method": "delta",
         "params": ["@player.charm", -1]
+      },
+      {
+        "method": "add",
+        "params": ["@player.items", "energy_drink"]
       },
       {
         "method": "set",
@@ -149,6 +157,10 @@
         "params": ["@player.charm", -2]
       },
       {
+        "method": "add",
+        "params": ["@player.items", "curse_book"]
+      },
+      {
         "method": "set",
         "params": ["@global.availableActions", ["after_school"]]
       }
@@ -177,7 +189,7 @@
       },
       {
         "method": "set",
-        "params": ["@global.availableActions", ["weekend_event"]]
+        "params": ["@global.availableActions", ["random_encounter"]]
       }
     ]
   },
@@ -444,27 +456,5 @@
         "params": ["@global.availableActions", ["morning_class"]]
       }
     ]
-  },
-  {
-    "name": "use_item",
-    "isAction": true,
-    "args": [
-      {
-        "name": "player",
-        "selector": "PLAYER"
-      }
-    ],
-    "descTemplate": "使用道具",
-    "conditions": [
-      {
-        "method": "in",
-        "params": ["use_item", "@global.availableActions"]
-      },
-      {
-        "method": "gt",
-        "params": ["@player.items.length", 0]
-      }
-    ],
-    "effects": []
   }
 ]

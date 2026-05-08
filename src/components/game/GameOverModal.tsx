@@ -57,15 +57,6 @@ export function GameOverModal() {
             </div>
           </div>
 
-          {/* 评价文本 */}
-          <div className="text-center text-sm text-muted-foreground">
-            {score >= 50 && "令人敬佩！你在这个危险的世界中生存了很久。"}
-            {score >= 30 && score < 50 && "不错的表现！你已经掌握了生存的基本技巧。"}
-            {score >= 20 && score < 30 && "还算可以，继续努力保持平衡。"}
-            {score >= 10 && score < 20 && "需要更好地平衡各项属性。"}
-            {score < 10 && "别灰心，多试几次你会找到诀窍的。"}
-          </div>
-
           {/* 操作按钮 */}
           <div className="flex gap-3">
             <Button 
@@ -81,12 +72,6 @@ export function GameOverModal() {
             >
               返回主页
             </Button>
-          </div>
-
-          {/* 提示信息 */}
-          <div className="text-xs text-muted-foreground text-center space-y-1">
-            <p>提示：合理平衡四项属性是生存的关键</p>
-            <p>避免任何属性达到±20的极值</p>
           </div>
         </CardContent>
       </Card>

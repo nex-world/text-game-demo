@@ -1,7 +1,7 @@
 import { Button } from '../ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Badge } from '../ui/badge';
 import { useGameStore } from '../../store/game-store';
+import { getItemActionLabel, getItemEffect, getItemName } from '../../utils/item-utils';
 
 export function ActionPanel() {
   const { 
@@ -58,9 +58,6 @@ export function ActionPanel() {
               >
                 <div className="flex flex-col items-start">
                   <span className="font-medium">{action.getDesc()}</span>
-                  <span className="text-xs text-muted-foreground mt-1">
-                    {action.template.name}
-                  </span>
                 </div>
               </Button>
             ))
@@ -74,36 +71,28 @@ export function ActionPanel() {
         {/* 道具使用 */}
         {playerStats.items.length > 0 && (
           <div className="space-y-2 pt-4 border-t">
-            <h4 className="text-sm font-medium">使用道具</h4>
-            <div className="grid grid-cols-2 gap-2">
-              {playerStats.items.map((item, index) => (
+            <h4 className="text-sm font-medium">道具</h4>
+            <div className="space-y-2">
+              {playerStats.items.map((item) => (
                 <Button
-                  key={index}
+                  key={item}
                   variant="secondary"
                   size="sm"
-                  className="h-auto py-2"
+                  className="h-auto w-full justify-between gap-3 py-2 text-left"
                   onClick={() => handleItemClick(item)}
                 >
-                  <div className="flex flex-col items-center">
-                    <Badge variant="outline" className="mb-1">
-                      {item}
-                    </Badge>
-                    <span className="text-xs">使用</span>
+                  <div className="min-w-0">
+                    <div className="font-medium">{getItemName(item)}</div>
+                    <div className="truncate text-xs text-muted-foreground">
+                      {getItemEffect(item)}
+                    </div>
                   </div>
+                  <span className="shrink-0 text-xs">{getItemActionLabel(item)}</span>
                 </Button>
               ))}
             </div>
           </div>
         )}
-
-        {/* 游戏提示 */}
-        <div className="pt-4 border-t">
-          <div className="text-xs text-muted-foreground space-y-1">
-            <p>• 属性值范围：-20 到 +20</p>
-            <p>• 达到极值（±20）会导致游戏结束</p>
-            <p>• 合理使用道具可以避免危险</p>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );

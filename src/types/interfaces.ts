@@ -99,6 +99,7 @@ export interface GameCallbacks {
   onPropertyChange?: (entityKey: string, propertyKey: string, oldValue: any, newValue: any) => void;
   onEventTriggered?: (event: Event) => void;
   onActionPerformed?: (action: Action) => void;
+  onItemUsed?: (itemKey: string, message: string) => void;
 }
 
 // UI 状态
